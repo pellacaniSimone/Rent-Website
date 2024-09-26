@@ -1,0 +1,22 @@
+{% extends 'base.html' %}  
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Restituzione di {{object.immobile.nome}} {% endblock %} 
+
+{% block header1 %}
+  <h1>Sopraluogo con id {{object.pk}}</h1>
+{% endblock %}
+
+{% block content %} 
+
+{% if "NO_ERRORS" == view.errore %}
+<div class="alert alert-success" role="alert">
+  Il sopraluogo è andato a buon fine: la sopraluogo con id {{ sopraluogo.pk }} è di nuovo disponibile
+{% else %}
+<div class="alert alert-danger" role="alert">
+  Operazione fallita: {{ view.errore }}
+{% endif %}
+</div>
+
+{% endblock %}

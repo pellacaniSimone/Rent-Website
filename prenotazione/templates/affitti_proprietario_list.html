@@ -1,0 +1,38 @@
+{% extends 'base.html' %}  
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+  <h1>Riepilogo affitti</h1>
+  <ul>
+    {% for immobile in object_list %}
+
+        <h2>{{ immobile.nome }}</h2>
+        Indirizzo: {{ immobile.indirizzo }}<br>
+        Prezzo: € {{ immobile.prezzo }} al giorno<br>
+        {% if not immobile.disponibile %}
+          <p style="color: red;">Affittato</p>
+        {% else %}
+          <p style="color: green;">Disponibile</p>
+        {% endif %}
+
+    {% empty %}
+      Nessun immobile trovato.
+    {% endfor %}
+  </ul>
+
+  <h2>Grafico affitti per appartamento</h2>
+  <div>
+    <img src="data:image/png;base64,{{ grafico_conteggi_prenot_totali }}" alt="Grafico Prenotazioni">
+  </div>
+
+  <br><br>
+
+  <h2>Distinta</h2>
+  <div>
+    <img src="data:image/png;base64,{{ grafico_distinta_prenotazioni }}" alt="Grafico Prenotazioni">
+  </div>
+
+<br><br><br>
+
+{% endblock %}

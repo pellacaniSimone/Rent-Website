@@ -1,0 +1,26 @@
+{% extends 'base.html' %}  
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block title %} Conferma registrazione {{ form.user_group_name }} {% endblock %} 
+
+{% block header1 %}
+<h1>Clicca sul punsante di conferma</h1>
+{% endblock %}
+
+<!--alert-success , alert-info,  alert-warning-->
+
+{% block content %}
+{% if "confirm" in request.GET.auth %}
+<div class="alert alert-info" role="alert">
+  Si è arrivati qui in quanto l'account non è ancora confermato, confermare!
+</div>
+{% endif %}
+<h2>Conferma Account</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit">Conferma</button>
+</form>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %} 
+
+{% block title %} Seleziona l'immobile interessato{% endblock %} 
+
+{% block content %} 
+<body>
+    <h1>Seleziona un immobile</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Conferma</button>
+    </form>
+</body>
+{% endblock %}

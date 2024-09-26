@@ -1,0 +1,109 @@
+{% extends 'base.html' %}  
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block title %} Riepilogo {% endblock %} 
+
+
+{% block content %} 
+
+<style>
+  .custom-img {
+      max-width: 400px; /* Imposta la larghezza massima desiderata */
+      height: auto; /* Mantiene l'aspetto proporzionato */
+  }
+  .custom-btn {
+    background-color: lightblue; /* Colore azzurro chiaro */
+    /* Aggiungi altri stili desiderati come il colore del testo, margini, bordi, ecc. */
+  }
+</style>
+
+<h2> {{ view.nome }} {{ object_list.count }} immobili </h2>
+
+<br>
+<div class="card mb-3"> 
+  <div class="card-header">
+      <br>
+      {% if object.disponibile %}
+      Immobile disponibile per l'affitto
+      {% else %}
+      Immobile attualmente non disponibile
+      {% endif %}
+  </div>
+  <div class="card-body">
+      <h5 class="card-title">{{ object.nome }}</h5>
+      {% if object.foto %}
+      <img src="{{ object.foto.url }}" alt="Foto Immobile" class="img-thumbnail custom-img"> 
+      {% endif %}
+      <p class="card-text">Un immobile di {{ object.indirizzo }} al prezzo di {{ object.prezzo }}  € giornalieri</p>
+      
+      {% if object.disponibile %} <!--Aggiungi conferma prenotazione con object.pk-->
+      <a href="{% url 'prenotazione:prenota' object.pk %}" class="btn btn-info">
+      {% else %}
+      <a href="#" class="btn btn-info disabled">
+      {% endif %}
+      Acquisto</a> 
+      <br>
+    </div>
+  </div>
+  <br><br>
+  <a href="{% url 'sopraluogo:sopraluogo' object.pk %}" class="btn btn-info custom-btn">
+    Sopraluogo
+  </a>
+  <br><br>
+<br>
+<h4>Recensioni</h4>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Utente</th>
+      <th>Testo</th>
+      <th>Voto</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for recensione in recensioni %}
+    <tr>
+      <td>{{ recensione.utente.stampa }}</td>
+      <td>{{ recensione.testo }}</td>
+      <!--<td>{{ recensione.stelline }}</td>-->
+      <td>
+        {% if recensione.stelline == 0 %}
+        🌟
+        {% elif recensione.stelline == 1 %}
+        🌟🌟
+        {% elif recensione.stelline == 2%}
+        🌟🌟🌟
+        {% elif recensione.stelline == 3%}
+        🌟🌟🌟🌟
+        {% elif recensione.stelline == 4%}
+        🌟🌟🌟🌟🌟
+        {% endif %}
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="3">Nessuna recensione disponibile.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{% if "ok" in request.GET.confirm %}
+<div class="alert alert-success" role="alert">
+  Recensione avvenuta con successo!
+</div>
+{% endif %}
+
+<h2>Lascia una recensione</h2>
+<form method="post" action="{% url 'recensione:aggiungi' object.pk %}">
+  {% csrf_token %}
+  {{ form|crispy }}
+  <button type="submit" class="btn btn-primary">Invia Recensione</button>
+</form>
+<br>
+<br>
+<br>
+{% endblock %}

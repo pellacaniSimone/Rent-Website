@@ -1,0 +1,33 @@
+{% extends 'base.html' %}  
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Login come Utente Registrato{% endblock %} 
+
+{% block header1 %}
+  <h1>Pagina di Login</h1>
+  <p>Si prega di compilare i campi necessari</p> 
+{% endblock %}
+
+{% block content %} 
+  {% if "notok" in request.GET.auth %}
+  <div class="alert alert-danger" role="alert">
+    Si è arrivati qui in quanto non si dispone dei permessi necessari per il servizio scelto!
+  </div>
+  {% endif %}
+
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <form method="post"> {% csrf_token %}
+    {{form | crispy}}  
+    <input type="submit" class="btn btn-success" value="Esegui login">
+  </form>
+{% endblock %}
+
+{% block footer %} {% endblock %}

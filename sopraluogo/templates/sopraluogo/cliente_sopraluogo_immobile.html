@@ -1,0 +1,30 @@
+{% extends 'base.html' %}  
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Situazione Sopraluoghi {% endblock %} 
+
+{% block header1 %}
+  <h1>Loggato come {{ user.username }} </h1>
+  <p>Benvenuto {{ user.username }}</p> 
+{% endblock %}
+
+{% block content %} 
+<h2> Stato attuale della sopraluogo </h2>
+<br>
+{% for l in object_list %}
+  <br>
+  <div class="card">
+    <div class="card-header">
+       Immobile con id {{ l.pk }}
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">{{ l.nome }} di {{ l.zona }}</h5>
+      <p class="card-text">{{ l }}</p>
+      <a href="{% url 'sopraluogo:pro_sopraluoghi' l.pk %}" class="btn btn-info"> Visualizza Dettagli Aggiuntivi </a> 
+    </div>
+  </div>
+  <br>
+{% endfor %} 
+<br>
+{% endblock %}

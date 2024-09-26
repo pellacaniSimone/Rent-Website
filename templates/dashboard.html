@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %} Pagina di gestione {% endblock %} 
+
+{% block header1 %}
+
+<div style="text-align: center;">
+  <h1>User dashboard</h1>
+  <p>Benvenuto 
+    {% if user.is_authenticated %}
+     {{ user.username }}
+    {% endif %}
+  </p> 
+</div>
+{% endblock %}
+
+{% block content %} 
+
+<h4>Scegli l'opzione che preferisci</h2>
+  <br>
+    <div class="list-group">
+      <h8>Opzioni Utente </h2>
+      <form action="{% url 'utenti:userdetail' user.id %}" method="post" class="list-group-item list-group-item-info">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-link">User settings</button>
+      </form>
+      <form action="{% url 'immobile:ricerca_avanzata' %}" method="get" class="list-group-item list-group-item-info">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-link">Cerca un immobile</button>
+      </form>
+      <form action="{% url 'immobile:lista_immobili' %}" method="get" class="list-group-item list-group-item-info">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-link">Lista offerte</button>
+      </form>
+      {% if "Confermato" in user.groups.all.0.name or user.is_staff %}
+      <form action="{% url 'immobile:seleziona_immobile' %}" method="post" class="list-group-item list-group-item-info">
+        {% csrf_token %}
+      <button type="submit" class="btn btn-link">Aggiungi una prenotazione o prenota un sopraluogo</button>
+      </form>
+      <form action="{% url 'prenotazione:storico_cli' %}" method="post" class="list-group-item list-group-item-info">
+        {% csrf_token %}
+      <button type="submit" class="btn btn-link">Storico prenotazioni</button>
+      </form>
+      {% endif %}
+      {% if not "Confermato" in user.groups.all.0.name or user.is_staff %}
+      <form action="{% url 'utenti:confirm_account' %}" method="post" class="list-group-item list-group-item-info">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-link">Registra cliente</button>
+      </form>
+      {% endif %}
+    </div>
+  <br>
+
+  {% if user.is_staff %}
+  <h8>Opzioni Staff</h2>
+  <a href="{% url 'utenti:register_pro' %}" class="list-group-item list-group-item-danger">Conferma un proprietario</a>
+  <a href="{% url 'zone:nuova_zona' %}" class="list-group-item list-group-item-danger">Zone geografiche</a>
+  <br>
+  {% endif %}
+
+  {% if "Proprietario" in user.groups.all.1.name or user.is_staff %}
+  <h8>Opzioni Proprietari</h2>
+  <div class="list-group">
+    <form action="{% url 'immobile:crea_immobile' %}" method="get" class="list-group-item list-group-item-warning">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-link">Aggiungi un immobile</button>
+    </form>
+    <form action="{% url 'prenotazione:storico_pro' %}" method="get" class="list-group-item list-group-item-warning">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-link">Storico prenotazioni vendute</button>
+    </form>
+    <form action="{% url 'sopraluogo:calendar' %}" method="get" class="list-group-item list-group-item-warning">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-link">Calendario sopralluoghi</button>
+    </form>
+  </div>
+  <br>
+  {% endif %}
+
+
+
+<br>
+
+{% endblock %}

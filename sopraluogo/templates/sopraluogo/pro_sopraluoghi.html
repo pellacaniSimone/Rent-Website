@@ -1,0 +1,35 @@
+{% extends 'base.html' %}  
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Dettagli di {{object.nome}} {% endblock %} 
+
+{% block header1 %}
+  <h1> {{object}}</h1>
+{% endblock %}
+
+{% block content %} 
+<br>
+<div class="card">
+  <div class="card-header">
+     Immobile con id {{ object.pk }}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{ object.nome }} di {{object.zona}} </h5>
+    <p class="card-text"> 
+      <ul>
+          {% for c in object.sopraluoghi.all %}
+            <li>  Sopraluogo con id: {{c.pk}} 
+                {% if c.data_ora_sopraluogo  %}
+                  affittato a {{ c.utente.username }} dal {{ c.data_ora_sopraluogo }}
+                {% else %} 
+                  Attualmente non in affittati.
+                {% endif %}
+            </li>
+          {% endfor %}
+      </ul>
+    </p>
+  </div>
+</div>
+<br>
+{% endblock %}

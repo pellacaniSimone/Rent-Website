@@ -1,0 +1,52 @@
+{% extends 'base.html' %}  
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<style>
+  /* styles.css */
+.background-attiva {
+  background-color: #eef5e7;
+}
+
+.background-passata {
+  background-color: #fdebd0;
+}
+
+.background-futura {
+  background-color: #d6eaf8;
+}
+
+</style>
+
+
+  <h1>Le tue prenotazioni</h1>
+  <p>Stato prenotazione (con color-code): A = attiva, p = passata , F = futura</p>
+  <table class="table" id="prenotazioni-table">
+    <thead>
+      <tr>
+        <th>Immobile</th>
+        <th>data inizio prenotazione</th>
+        <th>durata prenotazione</th>
+        <th>Stato</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for prenotazione in prenots %}
+        <!--tr id="row-{{ forloop.counter }}"-->
+          <tr class="{% if prenotazione.futura %}background-attiva{% elif prenotazione.attiva %}background-passata{% else %}background-futura{% endif %}">
+          <td>{{ prenotazione.immobile.nome }}</td>
+          <td>{{ prenotazione.data_prenotazione }}</td>
+          <td>{{ prenotazione.durata }}</td>
+          <!--Attenzione sistemare timing fix-->
+          <td>{% if prenotazione.futura %}F{% elif prenotazione.attiva %}A{% else %}p{% endif %}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="3">Nessuna prenotazione disponibile.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

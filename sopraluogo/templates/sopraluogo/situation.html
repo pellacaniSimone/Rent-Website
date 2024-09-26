@@ -1,0 +1,38 @@
+{% extends 'base.html' %}  
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Home di {{ user.username }} {% endblock %} 
+
+{% block header1 %}
+  <h1>Home di {{ user.username }} </h1>
+  <p>Benvenuto 
+    {% if user.is_authenticated %}
+      {{ user.username }}
+    {% else %}
+      Utente non registrato
+    {% endif %}
+  </p> 
+{% endblock %}
+
+{% block content %} 
+<h2>Risulta che hai correntemente in contratto sopraluogo: {{ lista_sopraluoghi.count }} sopraluoghi </h2>
+<p> Ulteriori dettagli </p>
+<br>
+{% for c in lista_sopraluoghi %}
+  <br>
+  <div class="card">
+    <div class="card-header">
+      Sopraluogo con id {{ c.pk }}
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">{{ c.immobile.nome }}</h5>
+      <p class="card-text">Un immobile di {{ c.immobile.zona }} al prezzo di {{ c.immobile.prezzo }} € giornalieri</p>
+      
+      <a href="{% url 'sopraluoghi:terminazione' c.pk %}" class="btn btn-info"> Concludi sopraluogo</a> 
+    </div>
+  </div>
+  <br>
+{% endfor %}
+<br>
+{% endblock %}

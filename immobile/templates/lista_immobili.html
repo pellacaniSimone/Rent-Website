@@ -1,0 +1,55 @@
+{% extends 'base.html' %}  
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block title %} Lista di Immobili{% endblock %} 
+
+{% block header1 %}
+  <h1>Lista di Immobili</h1>
+{% endblock %}
+
+{% block content %} 
+
+
+<style>
+  .custom-img {
+      max-width: 200px; /* Imposta la larghezza massima desiderata */
+      height: auto; /* Mantiene l'aspetto proporzionato */
+  }
+</style>
+
+<h2> {{ view.nome }} {{ object_list.count }} immobili </h2>
+
+{% for l in object_list %}
+<br>
+<div class="card mb-3"> 
+  <div class="card-header">
+      <br>
+      {% if l.disponibile %}
+      Immobile disponibile per l'affitto
+      {% else %}
+      Immobile attualmente non disponibile
+      {% endif %}
+  </div>
+  <div class="card-body">
+      <h5 class="card-title">{{ l.nome }}</h5>
+      {% if l.foto %}
+      <img src="{{ l.foto.url }}" alt="Foto Immobile" class="img-thumbnail custom-img"> 
+      {% endif %}
+      <p class="card-text">Un immobile di {{ l.indirizzo }} al prezzo di {{ l.prezzo }}  € giornalieri</p>
+      {% if l.disponibile %} <!--Aggiungi home da questo link detail view-->
+      <a href="{% url 'immobile:immobile_detail' l.pk %}" class="btn btn-info">
+      {% else %}
+      <a href="#" class="btn btn-info disabled">
+      {% endif %}
+      Prenota ora!</a> 
+  </div>
+</div>
+<br>
+{% endfor %}
+
+
+<br>
+
+{% endblock %}
